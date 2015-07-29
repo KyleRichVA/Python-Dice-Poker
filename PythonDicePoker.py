@@ -35,11 +35,18 @@ class Player(object):
 			print "Die " + str(diceNum) + ": [" + str(die.value) + "],",
 			diceNum += 1
 
-	def makeRolls(self): # sends roll commands to all dice.
+	def makeRolls(self, rollsNeeded = []): # setups certain dice to be specificly rolled and sends roll commands to all dice.
+		for die in rollsNeeded:
+			die.needRoll = True
 		for die in self.dice:
 			die.roll()
 
 #testing stuff
-print "Muhahaha, I made changes in my Windows PC!"
+print "But then changed it back in Mac OS"
+me = Player(HUMAN,"Kyle")
+me.makeRolls()
+me.report()
+me.makeRolls([me.dice[0],me.dice[4]])
+me.report()
 
 
