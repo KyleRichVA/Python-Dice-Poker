@@ -40,12 +40,6 @@ class Player(object):
 			die.roll()
 
 #testing stuff
-me = Player(HUMAN,"Kyle")
-me.makeRolls()
-me.report()
-me.dice[3].needRoll = True
-me.dice[0].needRoll = True
-me.makeRolls()
-me.report()
+print "Muhahaha, I made changes in my Windows PC!"
 
 
