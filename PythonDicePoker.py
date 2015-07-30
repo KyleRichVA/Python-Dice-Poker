@@ -4,6 +4,7 @@
 	Final verison should allow multiple players and AI players.
 '''
 import random
+import string
 HUMAN = True
 AI = False
 
@@ -35,7 +36,11 @@ class Player(object):
 			print "Die " + str(diceNum) + ": [" + str(die.value) + "],",
 			diceNum += 1
 
-	def makeRolls(self, rollsNeeded = []): # setups certain dice to be specificly rolled and sends roll commands to all dice.
+	def makeRolls(self, rollsNeededStr = ''): # setups certain dice to be specificly rolled and sends roll commands to all dice.
+		rollsNeeded = []
+		for char in rollsNeededStr:
+			if char in string.digits and int(char) in range(1,6):
+				rollsNeeded.append(self.dice[int(char) - 1])
 		for die in rollsNeeded:
 			die.needRoll = True
 		for die in self.dice:
@@ -46,7 +51,7 @@ print "But then changed it back in Mac OS"
 me = Player(HUMAN,"Kyle")
 me.makeRolls()
 me.report()
-me.makeRolls([me.dice[0],me.dice[4]])
+me.makeRolls('1 5')
 me.report()
 
 
