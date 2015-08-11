@@ -45,7 +45,7 @@ class Player(object):
 		print self.name + " dice are:"
 		diceNum = 1
 		for die in self.dice:
-			print "Die " + str(diceNum) + ": [" + str(die.value) + "],",
+			print "Die " + str(diceNum) + ": [" + str(die.value) + "],\n",
 			diceNum += 1
 
 	def makeRolls(self, rollsNeededStr = ''): # setups certain dice to be specificly rolled and sends roll commands to all dice.
@@ -107,10 +107,57 @@ class Player(object):
 
 		return NOTHING
 
-#testing stuff
-me = Player(HUMAN,"Kyle")
-me.makeRolls()
-me.report()
-print "Your score is:", me.score()
+	def scoreReport(self,score):
+		#prints out to the console the current player's score in plain text.
+		if score == NOTHING:
+			print self.name, "has nothing\n"
+		elif score == PAIR:
+			print self.name, "has a Pair\n"
+		elif score == TWOPAIR:
+			print self.name, "has Two Pairs\n"
+		elif score == THREEOFKIND:
+			print self.name, "has A Three of A Kind\n"
+		elif score == FIVEHIGHSTRAIGHT:
+			print self.name, "has A Five High Straight\n"
+		elif score == SIXHIGHSTRAIGHT:
+			print self.name, "has A Six High Straight\n"
+		elif score == FULLHOUSE:
+			print self.name, "has A Full House\n"
+		elif score == FOUROFKIND:
+			print self.name, "has A Four of A Kind\n"
+		elif score == FIVEOFKIND:
+			print self.name, "has A Five of A Kind! WOAWH!\n"
+	def fullReport(self):
+		#does both report() and scoreReport() to make life easier.
+		self.report()
+		self.scoreReport(self.score())
+
+
+
+#main program
+print "Welcome to Dice Poker. What is player one's name?"
+playname = raw_input()
+player1 = Player(HUMAN,playname)
+print "And player two's?"
+playname = raw_input()
+player2 = Player(HUMAN,playname)
+player1.makeRolls()
+player1.fullReport()
+player2.makeRolls()
+player2.fullReport()
+print player1.name, "What Dice Would You Like To Reroll? (Type in the Die Numbers)\n"
+rerolls = raw_input()
+player1.makeRolls(rerolls)
+print player2.name, "What Dice Would You Like To Reroll? (Type in the Die Numbers)\n"
+rerolls = raw_input()
+player2.makeRolls(rerolls)
+player1.fullReport()
+player2.fullReport()
+if player1.score() > player2.score():
+	print player1.name, "is the winner!"
+else:
+	print player2.name, "is the winner!"
+
+
 
 
