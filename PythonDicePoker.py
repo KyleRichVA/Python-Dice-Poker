@@ -135,6 +135,8 @@ class Player(object):
 
 
 #main program
+# ahh frack it I'm gonna add multiple players now.
+print "YO HOW MANY PLAYERS YOU WANT?"
 print "Welcome to Dice Poker. What is player one's name?"
 playname = raw_input()
 player1 = Player(HUMAN,playname)
