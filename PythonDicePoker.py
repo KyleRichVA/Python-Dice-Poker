@@ -137,28 +137,17 @@ class Player(object):
 #main program
 # ahh frack it I'm gonna add multiple players now.
 print "YO HOW MANY PLAYERS YOU WANT?"
-print "Welcome to Dice Poker. What is player one's name?"
-playname = raw_input()
-player1 = Player(HUMAN,playname)
-print "And player two's?"
-playname = raw_input()
-player2 = Player(HUMAN,playname)
-player1.makeRolls()
-player1.fullReport()
-player2.makeRolls()
-player2.fullReport()
-print player1.name, "What Dice Would You Like To Reroll? (Type in the Die Numbers)\n"
-rerolls = raw_input()
-player1.makeRolls(rerolls)
-print player2.name, "What Dice Would You Like To Reroll? (Type in the Die Numbers)\n"
-rerolls = raw_input()
-player2.makeRolls(rerolls)
-player1.fullReport()
-player2.fullReport()
-if player1.score() > player2.score():
-	print player1.name, "is the winner!"
-else:
-	print player2.name, "is the winner!"
+numPlay = 0
+stuff = True
+while True:
+	try:
+		numPlay = int(raw_input())
+		if numPlay in range(1,6):
+			break
+		raise ValueError
+	except ValueError:
+		print "I just need a number between 1 and 5"
+print "the loop is broken."
 
 
 
