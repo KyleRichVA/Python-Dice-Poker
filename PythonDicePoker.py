@@ -41,6 +41,13 @@ class Player(object):
 		self.isHuman = humanity # determines if the player is AI or human
 		self.dice = [Die() for i in range(5)] # The five die that the player has
 
+	def totDiceVal(self):
+		# returns the total value of all the dice.
+		total = 0
+		for die in self.dice:
+			total += die.value
+		return total
+
 	def report(self): # prints out the current dice the player has
 		print self.name + " dice are:"
 		diceNum = 1
@@ -135,29 +142,61 @@ class Player(object):
 
 
 #main program
-print "Welcome to Dice Poker. What is player one's name?"
-playname = raw_input()
-player1 = Player(HUMAN,playname)
-print "And player two's?"
-playname = raw_input()
-player2 = Player(HUMAN,playname)
-player1.makeRolls()
-player1.fullReport()
-player2.makeRolls()
-player2.fullReport()
-print player1.name, "What Dice Would You Like To Reroll? (Type in the Die Numbers)\n"
-rerolls = raw_input()
-player1.makeRolls(rerolls)
-print player2.name, "What Dice Would You Like To Reroll? (Type in the Die Numbers)\n"
-rerolls = raw_input()
-player2.makeRolls(rerolls)
-player1.fullReport()
-player2.fullReport()
-if player1.score() > player2.score():
-	print player1.name, "is the winner!"
-else:
-	print player2.name, "is the winner!"
+# ahh frack it I'm gonna add multiple players now.
+print "YO HOW MANY PLAYERS YOU WANT?"
+numPlay = 0
+stuff = True
+# Determines the number of players from the user (1-5) 
+while True:
+	try:
+		numPlay = int(raw_input())
+		if numPlay in range(1,6):
+			break
+		raise ValueError
+	except ValueError:
+		print "I just need a number between 1 and 5"
+players = [] # the list of players.
+for num in range(numPlay): # go through each requested player and get their name to make player object.
+	print "What is Player",num+1,"name?"
+	tempname = raw_input()
+	players.append(Player(HUMAN,tempname)) # Add the player to the player list.
 
+# do rolls and reports for all players.
+for play in players:
+	play.makeRolls()
+	play.fullReport()
+# check for rerolls for players and send those reroll commands
+for play in players:
+	print play.name + ". What would you like to reroll? (Type in the die's number to reroll)"
+	play.makeRolls(raw_input())
+# final report
+for play in players:
+	play.fullReport()
+# score checking and winner determiner.
+bestPlayer = players[0] #player with best hand.
+index = 0
+tie = False
+tiedPlayers = []
+# goes through all players and finds the best, if there is a tie adds those players to a seprate list.
+for play in players[1::]:
+	if play.score() > bestPlayer.score():
+		bestPlayer = play
+		continue
+	if play.score() == bestPlayer.score():
+		if play.totDiceVal() > bestPlayer.totDiceVal():
+			bestPlayer = play
+			continue
+		elif play.totDiceVal == bestPlayer.totDiceVal():
+			tie = True
+			tiedPlayers.append(bestPlayer)
+			tiedPlayers.append(play)
+			continue
+if tie: # if there is a tie.
+	print "There is a tie between; "
+	for play in tiedPlayers:
+		print play.name
+else:
+	print bestPlayer.name, "is the winner!"
 
 
 
