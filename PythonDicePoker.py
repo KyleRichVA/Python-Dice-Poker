@@ -41,6 +41,13 @@ class Player(object):
 		self.isHuman = humanity # determines if the player is AI or human
 		self.dice = [Die() for i in range(5)] # The five die that the player has
 
+	def totDiceVal(self):
+		# returns the total value of all the dice.
+		total = 0
+		for die in self.dice:
+			total += die.value
+		return total
+
 	def report(self): # prints out the current dice the player has
 		print self.name + " dice are:"
 		diceNum = 1
@@ -160,14 +167,36 @@ for play in players:
 	play.fullReport()
 # check for rerolls for players and send those reroll commands
 for play in players:
-	print play.name, ". What would you like to reroll? (Type in the die's number to reroll)"
+	print play.name + ". What would you like to reroll? (Type in the die's number to reroll)"
 	play.makeRolls(raw_input())
 # final report
 for play in players:
 	play.fullReport()
 # score checking and winner determiner.
-bestPlayer = '' #player's name with best hand.
-
+bestPlayer = players[0] #player with best hand.
+index = 0
+tie = False
+tiedPlayers = []
+# goes through all players and finds the best, if there is a tie adds those players to a seprate list.
+for play in players[1::]:
+	if play.score() > bestPlayer.score():
+		bestPlayer = play
+		continue
+	if play.score() == bestPlayer.score():
+		if play.totDiceVal() > bestPlayer.totDiceVal():
+			bestPlayer = play
+			continue
+		elif play.totDiceVal == bestPlayer.totDiceVal():
+			tie = True
+			tiedPlayers.append(bestPlayer)
+			tiedPlayers.append(play)
+			continue
+if tie: # if there is a tie.
+	print "There is a tie between; "
+	for play in tiedPlayers:
+		print play.name
+else:
+	print bestPlayer.name, "is the winner!"
 
 
 
