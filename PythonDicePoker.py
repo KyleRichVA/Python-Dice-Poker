@@ -177,7 +177,7 @@ bestPlayer = players[0] #player with best hand.
 index = 0
 tie = False
 tiedPlayers = []
-# goes through all players and finds the best, if there is a tie adds those players to a seprate list.
+# goes through all players and finds the best, if there is a tie adds those players to a separate list.
 for play in players[1::]:
 	if play.score() > bestPlayer.score():
 		bestPlayer = play
