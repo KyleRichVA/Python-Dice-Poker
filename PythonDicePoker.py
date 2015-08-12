@@ -139,6 +139,7 @@ class Player(object):
 print "YO HOW MANY PLAYERS YOU WANT?"
 numPlay = 0
 stuff = True
+# Determines the number of players from the user (1-5) 
 while True:
 	try:
 		numPlay = int(raw_input())
@@ -147,7 +148,25 @@ while True:
 		raise ValueError
 	except ValueError:
 		print "I just need a number between 1 and 5"
-print "the loop is broken."
+players = [] # the list of players.
+for num in range(numPlay): # go through each requested player and get their name to make player object.
+	print "What is Player",num+1,"name?"
+	tempname = raw_input()
+	players.append(Player(HUMAN,tempname)) # Add the player to the player list.
+
+# do rolls and reports for all players.
+for play in players:
+	play.makeRolls()
+	play.fullReport()
+# check for rerolls for players and send those reroll commands
+for play in players:
+	print play.name, ". What would you like to reroll? (Type in the die's number to reroll)"
+	play.makeRolls(raw_input())
+# final report
+for play in players:
+	play.fullReport()
+# score checking and winner determiner.
+bestPlayer = '' #player's name with best hand.
 
 
 
