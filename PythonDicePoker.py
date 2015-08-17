@@ -38,7 +38,7 @@ class Player(object):
 
 	def __init__(self, humanity, name):
 		self.name = name # the name of the player.
-		self.isHuman = humanity # determines if the player is AI or human
+		self.humanity = humanity # deterimes if the player is human or AI
 		self.dice = [Die() for i in range(5)] # The five die that the player has
 
 	def totDiceVal(self):
@@ -139,13 +139,33 @@ class Player(object):
 		self.report()
 		self.scoreReport(self.score())
 
+	def findBestRoll(self):
+		''' figures out what the best possible rolls are currently.
+		to keep things simple it just keeps the dice that are relevent to it's current score
+		and rolls the ones that don't currently help it.
+
+		It goes through each die and sets it's value temporarly to -1. If the dice score is the same then 
+		that die can be rerolled.'''
+		currentDie = 1
+		dieValSave = -1
+		baseScore = self.score()
+		needRolls = ''
+		for die in self.dice:
+			dieValSave = die.value
+			die.value = -1
+			if self.score() == baseScore:
+				needRolls = needRolls + str(currentDie)
+			die.value = dieValSave
+			currentDie += 1
+		return needRolls
 
 
 #main program
-# ahh frack it I'm gonna add multiple players now.
-print "YO HOW MANY PLAYERS YOU WANT?"
+
+print "Welcome to Python Dice Poker, how many players would you like? You can have up to 5."
 numPlay = 0
-stuff = True
+numAI = 0
+numHuman = 0
 # Determines the number of players from the user (1-5) 
 while True:
 	try:
@@ -155,11 +175,23 @@ while True:
 		raise ValueError
 	except ValueError:
 		print "I just need a number between 1 and 5"
+print "How many of those players would you like to be AI players?"
+while True:
+	try:
+		numAI = int(raw_input())
+		if numAI in range(numPlay+1):
+			break
+		raise ValueError
+	except ValueError:
+		print "We can only have as many AIs as we have players."
 players = [] # the list of players.
-for num in range(numPlay): # go through each requested player and get their name to make player object.
+numHuman = numPlay - numAI
+for num in range(numHuman): # go through each requested human player and get their name to make player object.
 	print "What is Player",num+1,"name?"
 	tempname = raw_input()
 	players.append(Player(HUMAN,tempname)) # Add the player to the player list.
+for num in range(numAI): # then add the AI (names are just AI+ number)
+	players.append(Player(AI,"AI"+str(num+1)))
 
 # do rolls and reports for all players.
 for play in players:
@@ -167,8 +199,11 @@ for play in players:
 	play.fullReport()
 # check for rerolls for players and send those reroll commands
 for play in players:
-	print play.name + ". What would you like to reroll? (Type in the die's number to reroll)"
-	play.makeRolls(raw_input())
+	if play.humanity == HUMAN:
+		print play.name + ". What would you like to reroll? (Type in the die's number to reroll)"
+		play.makeRolls(raw_input())
+	else:
+		play.makeRolls(play.findBestRoll())
 # final report
 for play in players:
 	play.fullReport()
